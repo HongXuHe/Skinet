@@ -8,9 +8,7 @@ using Skinet.Core.Interfaces;
 
 namespace Skinet.API.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class ProductBrandsController:ControllerBase
+    public class ProductBrandsController:BaseApiController
     {
         private readonly IProductBrandRepo _brandRepo;
 

@@ -3,10 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Skinet.API.MapperProfiles;
-using Skinet.API.MapperResolver;
-using Skinet.Core.Interfaces;
+using Skinet.API.Extensions;
 using Skinet.Infrastructure.Data;
 
 namespace Skinet
@@ -20,15 +17,13 @@ namespace Skinet
 
         public IConfiguration Configuration { get; }
 
-        
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
             //add cors
-            services.AddCors(options =>
-            {
-                options.AddPolicy("allowCors", policy =>
-                {
+            services.AddCors(options => {
+                options.AddPolicy("allowCors", policy => {
                     policy.AllowAnyOrigin()
                         .AllowAnyMethod()
                         .AllowAnyHeader();
@@ -36,40 +31,31 @@ namespace Skinet
             });
 
             //add db context
-            services.AddDbContext<StoreContext>(options =>
-            {
+            services.AddDbContext<StoreContext>(options => {
                 options.UseSqlite("Data Source=test.db");
             });
 
-            //add services
-            services.AddScoped<IProductRepo, ProductRepo>();
-            services.AddScoped<IProductBrandRepo, ProductBrandRepoRepo>();
-            services.AddScoped<IProductTypeRepo, ProductTypeRepoRepo>();
-            //add automapper
-            services.AddAutoMapper(config =>
-            {
-                config.AddProfile<ProductMapperProfile>();
-            });
-            services.AddTransient<ProductMapperResolver>();
+            services.AddApplicationService();
+            services.AddSwaggerDocumentation();
         }
 
-        
+
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment()) {
-                app.UseDeveloperExceptionPage();
-            }
+            app.UseCustomException();
+            app.UseStatusCodePagesWithReExecute("apr/errors/{0}");
+
             app.UseRouting();
             app.UseStaticFiles();
             app.UseCors("allowCors");
             // app.UseAuthorization();
-
+            app.UseSwaggerDocumentation();
             app.UseEndpoints(endpoints => {
                 endpoints.MapControllers();
             });
-          
+
         }
 
-   
+
     }
 }
