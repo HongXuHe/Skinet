@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Skinet.API.Dtos;
+using Skinet.API.MapperResolver;
 using Skinet.Core.Entities;
 
 namespace Skinet.API.MapperProfiles
@@ -16,7 +17,8 @@ namespace Skinet.API.MapperProfiles
                 .ForMember(des => des.ProductBrand,
                     x => x.MapFrom(src => src.ProductBrand.Name))
                 .ForMember(des => des.ProductType, x => x.MapFrom(
-                    src => src.ProductType.Name));
+                    src => src.ProductType.Name))
+                .ForMember(des => des.PictureUrl, x => x.MapFrom<ProductMapperResolver>());
         }
     }
 }

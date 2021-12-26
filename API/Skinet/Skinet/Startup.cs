@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Skinet.API.MapperProfiles;
+using Skinet.API.MapperResolver;
 using Skinet.Core.Interfaces;
 using Skinet.Infrastructure.Data;
 
@@ -49,6 +50,7 @@ namespace Skinet
             {
                 config.AddProfile<ProductMapperProfile>();
             });
+            services.AddTransient<ProductMapperResolver>();
         }
 
         
