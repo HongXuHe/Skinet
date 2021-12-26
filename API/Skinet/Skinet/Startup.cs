@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Skinet.API.MapperProfiles;
 using Skinet.Core.Interfaces;
 using Skinet.Infrastructure.Data;
 
@@ -43,6 +44,11 @@ namespace Skinet
             services.AddScoped<IProductRepo, ProductRepo>();
             services.AddScoped<IProductBrandRepo, ProductBrandRepoRepo>();
             services.AddScoped<IProductTypeRepo, ProductTypeRepoRepo>();
+            //add automapper
+            services.AddAutoMapper(config =>
+            {
+                config.AddProfile<ProductMapperProfile>();
+            });
         }
 
         
@@ -52,6 +58,7 @@ namespace Skinet
                 app.UseDeveloperExceptionPage();
             }
             app.UseRouting();
+            app.UseStaticFiles();
             app.UseCors("allowCors");
             // app.UseAuthorization();
 
