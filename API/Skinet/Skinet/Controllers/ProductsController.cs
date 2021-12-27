@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Skinet.API.Dtos;
 using Skinet.API.Errors;
+using Skinet.API.Helpers;
 using Skinet.Core.Interfaces;
 using Skinet.Core.Specifications;
 using Skinet.Infrastructure.Data;
@@ -29,11 +30,14 @@ namespace Skinet.API.Controllers
         }
         [HttpGet("")]
         [ProducesResponseType(typeof(List<ProductToReturnDto>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetProducts()
+        public async Task<IActionResult> GetProducts([FromQuery]ProductSpecParams productParams)
         {
-            var spec =new ProductsWithTypesAndBrandsSpecification();
+            var spec =new ProductsWithTypesAndBrandsSpecification(productParams);
+            var countSpec =new ProductWithFiltersForCountSpecification(productParams);
+            var itemsCount = await _productRepo.CountAsync(countSpec);
             var products = await _productRepo.GetEntitiesAsync(spec);
-            return Ok(_mapper.Map<List<ProductToReturnDto>>(products));
+            var resData = _mapper.Map<List<ProductToReturnDto>>(products);
+            return Ok(new Pagination<ProductToReturnDto>(productParams.PageIndex,productParams.PageSize,itemsCount,resData));
         }
 
         [HttpGet]
