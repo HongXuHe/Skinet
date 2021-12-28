@@ -29,7 +29,7 @@ namespace Skinet.API.Controllers
             _mapper = mapper;
         }
         [HttpGet("")]
-        [ProducesResponseType(typeof(List<ProductToReturnDto>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Pagination<ProductToReturnDto>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetProducts([FromQuery]ProductSpecParams productParams)
         {
             var spec =new ProductsWithTypesAndBrandsSpecification(productParams);
