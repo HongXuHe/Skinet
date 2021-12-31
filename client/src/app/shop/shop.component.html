@@ -1,5 +1,6 @@
 <div class="container">
   <div class="row">
+    <ng-container *ngIf="types && brands">
     <section class="col-3">
       <h5 class="text-warning ml-3">Sort</h5>
       <select class="custom-select mb-3" #select (change)="onSortSelected(select.value)">
@@ -15,7 +16,7 @@
         <li *ngFor="let type of types" [class.active]="type.id===shopParams.typeId" class="list-group-item" (click)="onTypeSelected(type.id)">{{type.name}}</li>
       </ul>
     </section>
-
+  </ng-container>
 
 
     <section class="col-9">

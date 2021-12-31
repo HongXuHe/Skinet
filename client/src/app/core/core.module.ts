@@ -5,6 +5,8 @@ import { RouterModule } from '@angular/router';
 import { TestErrorComponent } from './test-error/test-error.component';
 import { NotFountComponent } from './not-fount/not-fount.component';
 import { ServerErrorComponent } from './server-error/server-error.component';
+import { SectionHeaderComponent } from './components/section-header/section-header.component';
+import { BreadcrumbModule } from 'xng-breadcrumb';
 
 
 
@@ -13,12 +15,14 @@ import { ServerErrorComponent } from './server-error/server-error.component';
     NavBarComponent,
     TestErrorComponent,
     NotFountComponent,
-    ServerErrorComponent
+    ServerErrorComponent,
+    SectionHeaderComponent
   ],
   imports: [
     CommonModule,
+    BreadcrumbModule,
     RouterModule
   ],
-  exports:[NavBarComponent]
+  exports:[NavBarComponent,SectionHeaderComponent]
 })
 export class CoreModule { }
