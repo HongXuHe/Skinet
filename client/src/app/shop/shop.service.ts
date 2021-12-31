@@ -5,7 +5,8 @@ import { IBrand } from '../shared/models/brands.model';
 import { IPagination } from '../shared/models/pagination.model';
 import { ProductFilter } from '../shared/models/product-filter.model';
 import { IType } from '../shared/models/product-type.model';
-import { ShopModule } from './shop.module';
+import { IProduct } from '../shared/models/product.model';
+
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +34,10 @@ baseUrl ='http://localhost:5000/api/'
     ;
   }
 
+  //get single product
+  getProduct(id:number):Observable<IProduct>{
+   return this.http.get<IProduct>(`${this.baseUrl}products/${id}`);
+  }
 
   //get product brands
   getBrands():Observable<IBrand[]>{
