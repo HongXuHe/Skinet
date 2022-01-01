@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Skinet.API.Extensions;
 using Skinet.Infrastructure.Data;
+using StackExchange.Redis;
 
 namespace Skinet
 {
@@ -37,6 +38,15 @@ namespace Skinet
 
             services.AddApplicationService();
             services.AddSwaggerDocumentation();
+            services.AddSingleton<IConnectionMultiplexer>(p => {
+                var options = new ConfigurationOptions()
+                {
+                    
+                };
+                var configuration = ConfigurationOptions.Parse(Configuration.GetConnectionString("redis"), true);
+                return ConnectionMultiplexer.Connect($"192.168.1.128:6379,resolvedns=1,abortConnect=False,password=123456");
+            });
+            //  services.AddStackExchangeRedisCache
         }
 
 

@@ -20,6 +20,7 @@ namespace Skinet.API.Extensions
             services.AddScoped<IProductRepo, ProductRepo>();
             services.AddScoped<IProductBrandRepo, ProductBrandRepoRepo>();
             services.AddScoped<IProductTypeRepo, ProductTypeRepoRepo>();
+            services.AddSingleton<IBasketRepo, BasketRepo>();
             //add automapper
             services.AddAutoMapper(config => {
                 config.AddProfile<ProductMapperProfile>();
