@@ -8,8 +8,8 @@ using Skinet.Infrastructure.Data;
 namespace Skinet.Infrastructure.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20211226000129_init")]
-    partial class init
+    [Migration("20220102062716_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -37,9 +37,9 @@ namespace Skinet.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("Price")
+                    b.Property<double>("Price")
                         .HasColumnName("decimal(18,2)")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("REAL");
 
                     b.Property<int>("ProductBrandId")
                         .HasColumnType("INTEGER");
@@ -82,6 +82,32 @@ namespace Skinet.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ProductTypes");
+                });
+
+            modelBuilder.Entity("Skinet.Core.Entities.UserEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserEmail")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserPassword")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserEntities");
                 });
 
             modelBuilder.Entity("Skinet.Core.Entities.Product", b =>

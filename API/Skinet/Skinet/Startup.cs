@@ -1,8 +1,12 @@
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Skinet.API.Extensions;
 using Skinet.Infrastructure.Data;
 using StackExchange.Redis;
@@ -46,7 +50,31 @@ namespace Skinet
                 var configuration = ConfigurationOptions.Parse(Configuration.GetConnectionString("redis"), true);
                 return ConnectionMultiplexer.Connect($"192.168.1.128:6379,resolvedns=1,abortConnect=False,password=123456");
             });
-            //  services.AddStackExchangeRedisCache
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = Configuration["Jwt:Issuer"],
+                    ValidAudience = Configuration["Jwt:Issuer"],
+                    IssuerSigningKey = new
+                        SymmetricSecurityKey
+                        (Encoding.UTF8.GetBytes
+                            (Configuration["Jwt:Key"]))
+                };
+                options.Events = new JwtBearerEvents {
+                    OnAuthenticationFailed = context =>
+                    {
+                        if (context.Exception.GetType() == typeof(SecurityTokenExpiredException)) {
+                            context.Response.Headers.Add("Token-Expired", "true");
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
+            });
+            services.AddAuthorization();
         }
 
 
@@ -56,6 +84,8 @@ namespace Skinet
             app.UseStatusCodePagesWithReExecute("apr/errors/{0}");
 
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.UseStaticFiles();
             app.UseCors("allowCors");
             // app.UseAuthorization();

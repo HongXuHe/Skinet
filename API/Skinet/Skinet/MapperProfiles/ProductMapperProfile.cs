@@ -21,6 +21,8 @@ namespace Skinet.API.MapperProfiles
                 .ForMember(des => des.PictureUrl, x => x.MapFrom<ProductMapperResolver>());
             CreateMap<ProductBrand, ProductBrandToReturnDto>();
             CreateMap<ProductType, ProductTypeToReturnDto>();
+            CreateMap<UserDto, UserEntity>();
+            CreateMap<UserEntity, UserToRetrun>();
         }
     }
 }

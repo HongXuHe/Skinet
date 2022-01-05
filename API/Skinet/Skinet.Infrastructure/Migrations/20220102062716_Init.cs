@@ -2,7 +2,7 @@
 
 namespace Skinet.Infrastructure.Migrations
 {
-    public partial class init : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -33,13 +33,29 @@ namespace Skinet.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserEntities",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(nullable: true),
+                    UserName = table.Column<string>(nullable: false),
+                    UserPassword = table.Column<string>(nullable: false),
+                    UserEmail = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserEntities", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Products",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(maxLength: 100, nullable: false),
-                    decimal182 = table.Column<decimal>(name: "decimal(18,2)", nullable: false),
+                    decimal182 = table.Column<double>(name: "decimal(18,2)", nullable: false),
                     PictureUrl = table.Column<string>(nullable: false),
                     Description = table.Column<string>(maxLength: 100, nullable: false),
                     ProductTypeId = table.Column<int>(nullable: false),
@@ -77,6 +93,9 @@ namespace Skinet.Infrastructure.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Products");
+
+            migrationBuilder.DropTable(
+                name: "UserEntities");
 
             migrationBuilder.DropTable(
                 name: "ProductBrands");
